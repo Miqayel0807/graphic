@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
+import PropTypes from 'prop-types';
 import styles from './chart.module.css'
+
 const Chart = (props) => {
 
   const [chartData, setData] = useState({
@@ -74,5 +76,11 @@ const Chart = (props) => {
     </>
   )
 };
+
+Chart.propTypes={
+  data:PropTypes.array.isRequired,
+  inputData:PropTypes.array.isRequired
+
+}
 
 export default Chart;

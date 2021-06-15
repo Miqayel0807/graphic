@@ -93,7 +93,10 @@ const HomePage = () => {
         yearlyData={getYearlyData}
       />
 
-      <Chart data={chartProps.amount} inputData={chartProps.inputData} />
+      <Chart 
+      data={chartProps.amount} 
+      inputData={chartProps.inputData} 
+      />
     </>
   );
 };

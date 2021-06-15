@@ -1,9 +1,12 @@
+import { useState, useRef, useEffect } from "react";
+import  PropTypes from "prop-types";
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { useState, useRef, useEffect } from "react";
 import styles from './header.module.css'
+import { propTypes } from "react-bootstrap/esm/Image";
+
 
 
 const Header = (props) => {
@@ -129,5 +132,12 @@ const Header = (props) => {
         </>
     )
 }
+ Header.propTypes={
+     yearlyData:PropTypes.func.isRequired,
+     inputData:PropTypes.func.isRequired,
+     names:PropTypes.array.isRequired
+
+ }
+
 
 export default Header

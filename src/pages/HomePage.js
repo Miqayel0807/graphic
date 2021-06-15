@@ -1,5 +1,5 @@
-import Header from "./Header/Header";
-import Chart from "./Chart/Chart";
+import Header from "../Components/Header/Header";
+import Chart from "../Components/Chart/Chart";
 import React, { useEffect, useState } from "react";
 import Companies from "../services/companies";
 

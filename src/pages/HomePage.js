@@ -4,78 +4,47 @@ import React, { useEffect, useState } from "react";
 import Companies from "../services/companies";
 
 const HomePage = () => {
-  const [chartProps, setChartProps] = useState({
-    inputData: [],
-    amount: [],
-    nameUrl: "",
-  });
 
-  const [companyNames, setCompanyNames] = useState({
-    names: [],
-  });
+  const [inputData, setInputData] = useState([]);
+  const [amount, setAmount] = useState([]);
+
+  const [companyNames, setCompanyNames] = useState([]);
 
   const fromHeader = (value) => {
-    const input = [];
-    value.forEach((index) => {
-      input.push(parseInt(index));
+    const input = value.map((index) => {
+      return parseInt(index);
     });
-    setChartProps({
-      ...chartProps,
-      inputData: input,
-    });
+    setInputData(input);
   };
   const companiesService = new Companies();
   useEffect(() => {
     getCompanies();
   }, []);
 
-  const getCompanies = async (url) => {
-    const companies = await companiesService.getCompanies(url);
-    const { names } = companyNames;
-    companies.data.forEach((index) => {
-      names.push(index.name);
+  const getCompanies = async () => {
+    const companies = await companiesService.getCompanies();
+    const names  = companies.data.map((index) => {
+      return index.name;
     });
 
-    setCompanyNames({
-      ...companyNames,
-      names,
-    });
+    setCompanyNames(names);
   };
 
   const getYearlyData = async (url) => {
+
     const yearlyData = await companiesService.getCompanyYearly(url);
 
     const quarter = sliceIntoChunks(yearlyData.data, 3);
 
-    const quarterData = quarter[0].map((val) => {
-      return val.amount;
-    });
-    const quarterDataSecond = quarter[1].map((val) => {
-      return val.amount;
-    });
+    const amountData = quarter.map((value => {
+      return value.reduce((sum, current) => {
+        return sum + current.amount
+      }, 0)
+    }));
 
-    const quarterDataThird = quarter[2].map((val) => {
-      return val.amount;
-    });
-    const quarterDataFourth = quarter[3].map((val) => {
-      return val.amount;
-    });
-    const amount = [...chartProps.amount];
-    amount.push(
-      reducer(quarterData),
-      reducer(quarterDataSecond),
-      reducer(quarterDataThird),
-      reducer(quarterDataFourth)
-    );
-    setChartProps({
-      ...chartProps,
-      amount,
-    });
+    setAmount(amountData);
   };
 
-  const reducer = (array) => {
-    return array.reduce((sum, current) => sum + current, 0);
-  };
   const sliceIntoChunks = (arr, chunkSize) => {
     const res = [];
     for (let i = 0; i < arr.length; i += chunkSize) {
@@ -88,15 +57,14 @@ const HomePage = () => {
   return (
     <>
       <Header
-        names={companyNames.names}
+        names={companyNames}
         inputData={fromHeader}
         yearlyData={getYearlyData}
       />
 
-      <Chart 
-      data={chartProps.amount} 
-      inputData={chartProps.inputData} 
-      />
+      {amount.length ?  <Chart
+          data={amount}
+          inputData={inputData}/> : <p style={{textAlign:'center', fontWeight:'500', fontSize:'25px'}}> Please enter values. </p>}
     </>
   );
 };

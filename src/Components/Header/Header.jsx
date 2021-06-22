@@ -1,12 +1,10 @@
-import { useState, useRef, useEffect } from "react";
-import  PropTypes from "prop-types";
+import {useState, useRef, useEffect} from "react";
+import PropTypes from "prop-types";
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import styles from './header.module.css'
-import { propTypes } from "react-bootstrap/esm/Image";
-
 
 
 const Header = (props) => {
@@ -15,22 +13,19 @@ const Header = (props) => {
         second: '',
         third: '',
         fourth: '',
-        companyName: ''
     })
+    const [companyName, setCompanyName] = useState('');
 
     const ref = useRef(null)
     useEffect(() => {
         ref.current.focus()
     }, [])
     const choosenCompany = (name) => {
-        setData({
-            ...data,
-            companyName: name
-        })
+        setCompanyName(name)
     }
 
     const inputValues = (e) => {
-        const { name, value } = e.target
+        const {name, value} = e.target
         setData({
             ...data,
             [name]: value,
@@ -38,21 +33,22 @@ const Header = (props) => {
     }
 
     const calcFunc = (name) => {
-        if (data.companyName && (data.first || data.second || data.third || data.fourth)) {
-            props.yearlyData(name)
+
+        if(companyName && data.first && data.second && data.third && data.fourth){
+            props.yearlyData(companyName)
             props.inputData([data.first, data.second, data.third, data.fourth])
+
+            setData({
+                ...data,
+                first: "",
+                second: "",
+                third: "",
+                fourth: "",
+            })
+
         }
 
 
-        setData({
-            ...data,
-            first: '',
-            second: '',
-            third: '',
-            fourth: '',
-            companyName: ''
-
-        })
     }
     const names = props.names.map(index => {
         return (
@@ -63,7 +59,7 @@ const Header = (props) => {
         <>
             <div className={styles.header}>
                 <div>
-                    <FormControl variant="outlined" >
+                    <FormControl variant="outlined">
                         <InputLabel
                             className={styles.dropDownLabel}
                             id="demo-simple-select-outlined-label">
@@ -81,10 +77,11 @@ const Header = (props) => {
                 </div>
 
                 <div className={styles.labels}>
-                    <label >1st Quarte
+                    <label>1st Quarte
                         <input
                             className={styles.inputStyle}
-                            value={data.first} name={'first'}
+                            value={data.first}
+                             name={'first'}
                             onChange={inputValues}
                             type="number"
                             ref={ref}
@@ -98,7 +95,7 @@ const Header = (props) => {
                             value={data.second}
                             name={'second'}
                             onChange={inputValues}
-                            type="number" />
+                            type="number"/>
                     </label>
 
                     <label htmlFor="">
@@ -108,7 +105,7 @@ const Header = (props) => {
                             value={data.third}
                             name={'third'}
                             onChange={inputValues}
-                            type="number" />
+                            type="number"/>
                     </label>
 
                     <label>
@@ -118,7 +115,7 @@ const Header = (props) => {
                             value={data.fourth}
                             name={'fourth'}
                             onChange={inputValues}
-                            type="number" />
+                            type="number"/>
                     </label>
 
                     <button
@@ -132,12 +129,12 @@ const Header = (props) => {
         </>
     )
 }
- Header.propTypes={
-     yearlyData:PropTypes.func.isRequired,
-     inputData:PropTypes.func.isRequired,
-     names:PropTypes.array.isRequired
+Header.propTypes = {
+    yearlyData: PropTypes.func.isRequired,
+    inputData: PropTypes.func.isRequired,
+    names: PropTypes.array.isRequired
 
- }
+}
 
 
 export default Header
